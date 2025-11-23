@@ -1,6 +1,6 @@
 from typing import Union
 from fastapi import FastAPI
-from plugins import github
+from plugins import github, oseddl
 
 app = FastAPI()
 
@@ -10,4 +10,6 @@ def main(info: dict):
         if info["message_type"] == "group":
             if info["raw_message"].startswith("/github"):
                 return github.on_command(info)
+            if info["raw_message"].startswith("/oseddl"):
+                return oseddl.on_command(info)
     return {}
