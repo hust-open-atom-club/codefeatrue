@@ -1,0 +1,7 @@
+[ main ]
+plugins = [ "oseddl" ]
+
+[ other ]
+# 供插件使用的配置
+[[ oseddl ]]
+oseddl_github_token = ""

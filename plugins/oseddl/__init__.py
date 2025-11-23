@@ -1,8 +1,9 @@
 import requests
 import yaml
+import config
 
 # 常量定义
-TOKEN = None
+TOKEN = config.get("oseddl", "oseddl_github_token")
 HELP_MESSAGE = """Oseddl 功能使用帮助
 /oseddl activities 查看活动列表
 /oseddl competitions 查看比赛列表
@@ -35,8 +36,7 @@ def on_command(info: dict):
     
     # 获取数据
     try:
-        resp = None
-        if TOKEN:
+        if TOKEN != "":
             headers = {"Authorization": "Bearer "+TOKEN}
             resp = requests.get(f"{BASE_URL}/{main_command}.yml", timeout=15, headers=headers)
         else:
