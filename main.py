@@ -1,6 +1,5 @@
-from typing import Union
 from fastapi import FastAPI
-from plugins import github, oseddl
+from plugins import github, oseddl, bilibili
 
 app = FastAPI()
 
@@ -12,4 +11,7 @@ def main(info: dict):
         if info["message_type"] == "group":
             if info["raw_message"].startswith("/github"):
                 return github.on_command(info)
+            if info["message"][0]["type"] == "json":
+                # Type == card
+                return  bilibili.on_command(info)
     return {}
