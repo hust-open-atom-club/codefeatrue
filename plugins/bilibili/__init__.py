@@ -28,3 +28,4 @@ def on_command(message_type: str,info: dict):
             return {"reply": message}
     else:
         return {}
+    

@@ -13,3 +13,4 @@ def on_command(message_type: str,info: dict):
         return {
             "reply":"已绑定仓库"+sub_command.replace("add ", "")+"到 "+info["group_name"]+" 群号"+str(info["group_id"])
             }
+    

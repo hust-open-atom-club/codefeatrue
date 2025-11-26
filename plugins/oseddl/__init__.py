@@ -83,3 +83,4 @@ def on_command(message_type: str,info: dict):
     else:
         message = "\n".join(f"{i+1}：{item['title']}" for i, item in enumerate(resp_info))
         return {"reply": f"{message}\n\n您可以发送 /oseddl {main_command} 序号 查看该活动的具体信息"}
+    
