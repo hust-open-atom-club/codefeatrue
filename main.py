@@ -1,3 +1,5 @@
+"""程序总入口"""
+
 from fastapi import FastAPI
 from plugins import github, oseddl, bilibili
 

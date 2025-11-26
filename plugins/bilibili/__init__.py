@@ -1,3 +1,5 @@
+"""BiliBili解析插件"""
+
 from urllib.parse import urlparse
 import json
 import requests
@@ -5,7 +7,7 @@ import requests
 def on_command(message_type: str,info: dict):
     """
     处理接收到的命令
-    
+
     :param message_type: 消息类型
     :type message_type: str
     :param info: 信息
@@ -14,7 +16,7 @@ def on_command(message_type: str,info: dict):
     if message_type == "json":
         card_info = json.loads(str(info["message"][0]["data"]["data"]))
         if card_info["meta"]["detail_1"]["title"] == "哔哩哔哩":
-            resp = requests.get(card_info["meta"]["detail_1"]["qqdocurl"])
+            resp = requests.get(card_info["meta"]["detail_1"]["qqdocurl"], timeout=15)
             parsed_url = urlparse(str(resp.url))
             bv = parsed_url.path
             bv = bv.replace("/", "")
@@ -28,4 +30,3 @@ def on_command(message_type: str,info: dict):
             return {"reply": message}
     else:
         return {}
-    
