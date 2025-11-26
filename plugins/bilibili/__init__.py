@@ -9,8 +9,10 @@ def on_command(message_type: str,info: dict):
         parsed_url = urlparse(str(resp.url))
         bv = parsed_url.path
         bv = bv.replace("/", "")
+        url = parsed_url.netloc + parsed_url.path
         message = f"""检测到Bilibili分享卡片！
 视频标题：{card_info["meta"]["detail_1"]["desc"]}
-视频链接：{str(bv)}
+BV号：{str(bv)}
+视频链接：{str(url)}
 分享人：{card_info["meta"]["detail_1"]["host"]["uin"]}"""
         return {"reply": message}
