@@ -12,7 +12,7 @@ HELP_MESSAGE = """Oseddl 功能使用帮助
 BASE_URL = config.get("oseddl", "oseddl_base_url")
 VALID_COMMANDS = {"activities", "competitions", "conferences"}
 
-def on_command(info: dict):
+def on_command(message_type: str,info: dict):
     # 提取并清理命令
     raw_message = info.get("raw_message", "").strip()
     command_parts = raw_message.split()
