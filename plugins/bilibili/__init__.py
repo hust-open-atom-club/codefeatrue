@@ -1,7 +1,7 @@
 import json
 import requests
 
-def on_command(info: dict):
+def on_command(message_type: str,info: dict):
     card_info = json.loads(str(info["message"][0]["data"]["data"]))
     if card_info["meta"]["detail_1"]["title"] == "哔哩哔哩":
         resp = requests.get(card_info["meta"]["detail_1"]["qqdocurl"])

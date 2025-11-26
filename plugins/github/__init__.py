@@ -1,4 +1,4 @@
-def on_command(info: dict):
+def on_command(message_type: str,info: dict):
     sub_command = info["raw_message"].replace("/github ","")
     if sub_command.startswith("add"):
 
