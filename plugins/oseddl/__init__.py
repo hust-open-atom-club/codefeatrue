@@ -86,7 +86,7 @@ def on_command(message_type: str, info: dict):
     if len(sub_parts) >= 2:
         try:
             idx = int(sub_parts[1]) - 1
-            if not (0 <= idx < len(data)):
+            if not 0 <= idx < len(data):
                 raise ValueError(f"序号无效，请在 1-{len(data)} 范围内选择")
             detail_msg = _format_detail_view(data[idx])
             return {"reply": detail_msg}
