@@ -5,6 +5,12 @@ app = FastAPI()
 
 @app.post("/")
 def main(info: dict):
+    """
+    处理接收到的消息
+    
+    :param info: Onebot实现端传入的信息
+    :type info: dict
+    """
     if info["post_type"]=="message":
         message_type = info["message"][0]["type"]
         # 私聊/群 均传递
