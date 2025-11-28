@@ -49,48 +49,50 @@ def on_command(message_type: str, info: dict):
     """
     处理 /oseddl 命令。
 
-    :param message_type: 消息类型（目前仅处理 'text'）
+    :param message_type: 消息类型
     :param info: 包含 raw_message 的字典
     :return: 回复字典或空字典
     """
     reply = None
-    
     if message_type == "text":
         raw_message = info.get("raw_message", "").strip()
         parts = raw_message.split()
 
         if not parts or parts[0] != "/oseddl":
-            reply = {"reply": "无效的命令格式"}
+            return {"reply": "无效的命令格式"}
         else:
             sub_parts = parts[1:]
 
             if not sub_parts or sub_parts[0] == "help":
-                reply = {"reply": HELP_MESSAGE}
+                return {"reply": HELP_MESSAGE}
             else:
                 main_cmd = sub_parts[0]
                 if main_cmd not in VALID_COMMANDS:
-                    reply = {"reply": f"无效的命令，请使用以下有效命令：{', '.join(VALID_COMMANDS)}"}
+                    return {"reply": f"无效的命令，请使用以下有效命令：{', '.join(VALID_COMMANDS)}"}
                 else:
-                    try:
-                        data = _fetch_data(main_cmd)
-                        if not data:
-                            reply = {"reply": "未找到相关数据"}
-                        elif len(sub_parts) >= 2:
-                            try:
-                                idx = int(sub_parts[1]) - 1
-                                if not 0 <= idx < len(data):
-                                    raise ValueError(f"序号无效，请在 1-{len(data)} 范围内选择")
-                                detail_msg = _format_detail_view(data[idx])
-                                reply = {"reply": detail_msg}
-                            except (ValueError, KeyError, IndexError) as e:
-                                msg = str(e) if "无效" in str(e) else "无效的序号格式"
-                                reply = {"reply": f"查询失败：{msg}"}
-                        else:
-                            list_msg = _format_list_view(data, main_cmd)
-                            reply = {"reply": list_msg}
-                    except RuntimeError as e:
-                        reply = {"reply": str(e)}
+                    return _handle_detail_query(main_cmd, sub_parts)
     else:
         reply = {}
 
     return reply
+
+def _handle_detail_query(main_cmd, sub_parts):
+    try:
+        data = _fetch_data(main_cmd)
+        if not data:
+            return {"reply": "未找到相关数据"}
+        elif len(sub_parts) >= 2:
+            try:
+                idx = int(sub_parts[1]) - 1
+                if not 0 <= idx < len(data):
+                    raise ValueError(f"序号无效，请在 1-{len(data)} 范围内选择")
+                detail_msg = _format_detail_view(data[idx])
+                return {"reply": detail_msg}
+            except (ValueError, KeyError, IndexError) as e:
+                msg = str(e) if "无效" in str(e) else "无效的序号格式"
+                return {"reply": f"查询失败：{msg}"}
+        else:
+            list_msg = _format_list_view(data, main_cmd)
+            return {"reply": list_msg}
+    except RuntimeError as e:
+        return {"reply": str(e)}
