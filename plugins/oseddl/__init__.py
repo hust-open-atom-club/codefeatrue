@@ -53,35 +53,32 @@ def on_command(message_type: str, info: dict):
     :param info: 包含 raw_message 的字典
     :return: 回复字典或空字典
     """
-    reply = None
-    if message_type == "text":
-        raw_message = info.get("raw_message", "").strip()
-        parts = raw_message.split()
+    if message_type != "text":
+        return {}
 
-        if not parts or parts[0] != "/oseddl":
-            return {"reply": "无效的命令格式"}
-        else:
-            sub_parts = parts[1:]
+    raw_message = info.get("raw_message", "").strip()
+    parts = raw_message.split()
 
-            if not sub_parts or sub_parts[0] == "help":
-                return {"reply": HELP_MESSAGE}
-            else:
-                main_cmd = sub_parts[0]
-                if main_cmd not in VALID_COMMANDS:
-                    return {"reply": f"无效的命令，请使用以下有效命令：{', '.join(VALID_COMMANDS)}"}
-                else:
-                    return _handle_detail_query(main_cmd, sub_parts)
-    else:
-        reply = {}
+    if not parts or parts[0] != "/oseddl":
+        return {"reply": "无效的命令格式"}
 
-    return reply
+    sub_parts = parts[1:]
+
+    if not sub_parts or sub_parts[0] == "help":
+        return {"reply": HELP_MESSAGE}
+
+    main_cmd = sub_parts[0]
+    if main_cmd not in VALID_COMMANDS:
+        return {"reply": f"无效的命令，请使用以下有效命令：{', '.join(VALID_COMMANDS)}"}
+
+    return _handle_detail_query(main_cmd, sub_parts)
 
 def _handle_detail_query(main_cmd, sub_parts):
     try:
         data = _fetch_data(main_cmd)
         if not data:
             return {"reply": "未找到相关数据"}
-        elif len(sub_parts) >= 2:
+        if len(sub_parts) >= 2:
             try:
                 idx = int(sub_parts[1]) - 1
                 if not 0 <= idx < len(data):
@@ -91,8 +88,8 @@ def _handle_detail_query(main_cmd, sub_parts):
             except (ValueError, KeyError, IndexError) as e:
                 msg = str(e) if "无效" in str(e) else "无效的序号格式"
                 return {"reply": f"查询失败：{msg}"}
-        else:
-            list_msg = _format_list_view(data, main_cmd)
-            return {"reply": list_msg}
+        list_msg = _format_list_view(data, main_cmd)
+        return {"reply": list_msg}
+
     except RuntimeError as e:
         return {"reply": str(e)}
