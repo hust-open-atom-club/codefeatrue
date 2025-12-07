@@ -45,7 +45,7 @@ def _format_detail_view(item: dict) -> str:
     current_event = None
     next_event = None
 
-    for i, evt in enumerate(timeline_list):
+    for _i, evt in enumerate(timeline_list):
         evt_time = datetime.fromisoformat(evt["deadline"].replace("Z", "+00:00"))
         if evt_time < current_time:
             current_event = evt
@@ -67,8 +67,8 @@ def _format_detail_view(item: dict) -> str:
 - 时间：{current_event.get('deadline', '无').replace("T", " ")}
 至 {next_event.get('deadline', '无').replace("T", " ") if next_event else '无'}
 - 链接：{events[0].get('link', '无')}"""
-    else:
-        return f"""标题：{item.get('title', '无')}
+
+    return f"""标题：{item.get('title', '无')}
 介绍：{item.get('description', '无')}
 时间：{events[0].get('date', '无')}
 当前事件：
