@@ -12,14 +12,14 @@ __plugin_meta__  = {
     "events": ["message", "request"]  # 添加需要订阅的事件
 }
 
-def on_enable(app):
+def on_enable(_app):
     """
     插件启用时调用
     
     :param app: FastAPI应用实例
     """
 
-def on_event(event_type: str, info: dict):
+def on_event(_event_type: str, info: dict):
     """
     处理接收到的命令
 

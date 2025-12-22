@@ -86,7 +86,7 @@ def _format_detail_view(item: dict) -> str:
 - 链接：{events[0].get('link', '无')}"""
 
 
-def on_event(event_type: str, info: dict):
+def on_event(_event_type: str, info: dict):
     """
     处理 /oseddl 命令。
 
