@@ -10,7 +10,6 @@ from bs4 import BeautifulSoup
 log = logging.getLogger("uvicorn")
 
 # 全局缓存食堂数据，避免重复抓取
-_CANTEEN_DATA: List[Dict] = []
 _LAST_FETCH_TIME: float = 0.0
 _CACHE_EXPIRE_SECONDS = 3600  # 缓存1小时
 
@@ -141,12 +140,6 @@ class CanteenDataManager:
 # 实例化管理器
 _canteen_manager = CanteenDataManager()
 
-def _ensure_data_loaded():
-    """确保食堂数据已加载"""
-    # 直接从管理器获取数据，避免使用global
-    global _CANTEEN_DATA
-    _CANTEEN_DATA = _canteen_manager.get_data()
-
 
 def _parse_time(time_str: str) -> Optional[datetime.time]:
     """将 'HH:MM' 字符串转为 time 对象"""
@@ -247,14 +240,15 @@ def on_event(_event_type: str, info: dict):
     if not raw.startswith("/hust-eat"):
         return {"reply": None}  # 不处理其他命令，保持一致的返回格式
 
-    _ensure_data_loaded()
+    # 从管理器获取数据
+    canteen_data = _canteen_manager.get_data()
 
     parts = raw.split(maxsplit=1)
     if len(parts) == 1:
         # 只显示食堂名称 + 还能吃多久
         now = datetime.now()
         lines = []
-        for idx, c in enumerate(_CANTEEN_DATA, start=1):
+        for idx, c in enumerate(canteen_data, start=1):
             name = c.get('name').replace('食堂', '') or f"食堂{idx}"
             remaining = _format_remaining_time(_get_next_meal_end(c, now))
             lines.append(f"{idx}. {name} —— {remaining}")
@@ -269,12 +263,12 @@ def on_event(_event_type: str, info: dict):
     # 尝试按序号匹配
     if query.isdigit():
         idx = int(query)
-        if 1 <= idx <= len(_CANTEEN_DATA):
-            target = _CANTEEN_DATA[idx - 1]
+        if 1 <= idx <= len(canteen_data):
+            target = canteen_data[idx - 1]
     else:
         # 按名称模糊匹配（忽略空格和大小写）
         query_norm = query.lower().replace(" ", "")
-        for c in _CANTEEN_DATA:
+        for c in canteen_data:
             name_norm = (c.get('name') or "").lower().replace(" ", "")
             if query_norm in name_norm or name_norm in query_norm:
                 target = c
