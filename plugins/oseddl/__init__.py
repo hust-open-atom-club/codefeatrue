@@ -112,7 +112,7 @@ def on_event(_event_type: str, info: dict):
             return {"reply": f"无效的命令，请使用以下有效命令：{', '.join(VALID_COMMANDS)}"}
 
         return _handle_detail_query(main_cmd, sub_parts)
-    return {"reply": None}  # 修复：统一返回格式，保持一致性
+    return None
 
 def _handle_detail_query(main_cmd, sub_parts):
     try:

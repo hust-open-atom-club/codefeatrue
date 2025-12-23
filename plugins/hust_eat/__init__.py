@@ -28,7 +28,7 @@ def on_event(_event_type: str, info: dict):
     """
     raw = info.get("raw_message", "").strip()
     if not raw.startswith("/hust-eat"):
-        return {"reply": None}  # 不处理其他命令，保持一致的返回格式
+        return None
 
     # 从管理器获取数据
     canteen_data = canteen_manager.get_data()

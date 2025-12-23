@@ -23,7 +23,7 @@ pip install -r requirements.txt
 执行以下命令，启动机器人：
 
 ```bash
-uvicorn main:app --port 8000 --host 0.0.0.0
+uvicorn __init__:app --port 8000 --host 0.0.0.0
 ```
 
 您可以修改 '--port' 后面的数字设置端口。

@@ -46,5 +46,4 @@ BV号：{bv}
                 return {"reply": message}
         except (KeyError, json.JSONDecodeError) as e:
             return {"reply": "error:" + str(e)}
-
-    return {}
+    return None
