@@ -1,3 +1,6 @@
 __pycache__/
 bot/
 data/
+/config.toml
+uv.lock
+.python-version
